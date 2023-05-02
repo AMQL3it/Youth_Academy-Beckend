@@ -1,0 +1,15 @@
+version: '3.3'
+services:
+  db:
+    image: mysql:latest
+    command: --max-allowed-packet=64M
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'youth'
+      MYSQL_USER: 'app'
+      MYSQL_PASSWORD: '1234'
+      MYSQL_ROOT_PASSWORD: 'shahadat'
+    ports:
+      - "3306:3306"
+volumes: 
+  mysql-data:
