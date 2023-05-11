@@ -1,34 +1,34 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../databases/config');
 
-const Member = sequelize.define('Member', {
-    member_id: {
+const Admin = sequelize.define('Admin', {
+    admin_id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true
     },
-    member_name: {
+    admin_name: {
       type: DataTypes.STRING,
       allowNull: false,
       trim: true
     },
-    member_email: {
+    admin_email: {
       type: DataTypes.STRING,
+      allowNull: false,
       unique: true
     },
-    member_phone: {
+    admin_phone: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true
     },
-    member_password: {
+    admin_password: {
       type: DataTypes.STRING,
       allowNull: false
     }
   },
   {
-    tableName: 'members'
+    tableName: 'admins'
   });
 
-
-module.exports = Member ;
+module.exports = Admin ;

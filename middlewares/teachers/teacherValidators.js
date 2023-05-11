@@ -1,22 +1,22 @@
 const { check, validationResult } = require("express-validator");
-const Admin = require("../../models/adminModel");
 const createError = require('http-errors');
+const Teacher = require("../../models/teacherModel");
 
-const addAdminDataFilter = [
-    check('admin_name')
-        .isLength({ min: 5 })
+const addTeacherDataFilter = [
+    check('tch_name')
+        .isLength({ min: 3 })
         .withMessage('Name is required!')
         .isAlpha("en-US", { ignore: ' -'})
         .withMessage('Name must contain anything other than Alphabet')
         .trim(),
-    check('admin_email')
+    check('tch_email')
         .isEmail()
         .withMessage('Invalid email address')
         .trim()
-        .custom(async(admin_email) => {
+        .custom(async(tch_email) => {
             try{
-                const admin = await Admin.findOne({where:{admin_email: admin_email}});
-                if(admin){
+                const teacher = await Teacher.findOne({where:{tch_email: tch_email}});
+                if(teacher){
                     throw createError('Email is already used!');
                 }
             }
@@ -24,15 +24,15 @@ const addAdminDataFilter = [
                 throw createError(err.message);
             }
         }),
-    check('admin_phone')
+    check('tch_phone')
         .isMobilePhone('bn-BD', {
             strictMode: true
         })
         .withMessage('Mobile number must be a valid for Bangladesh')
-        .custom(async(admin_phone) => {
+        .custom(async(tch_phone) => {
             try{
-                const admin = await Admin.findOne({where: {admin_phone: admin_phone}});
-                if(admin){
+                const teacher = await Teacher.findOne({where: {tch_phone: tch_phone}});
+                if(teacher){
                     throw createError('Mobile number is already used!');
                 }
             }
@@ -40,24 +40,26 @@ const addAdminDataFilter = [
                 throw createError(err.message);
             }
         }),
-    check('admin_password')
-        .isStrongPassword()
-        .withMessage("Password must be strong")
+    check('tch_institute')
+        .isLength({ min: 1 })
+        .withMessage('Intitute name is required!')
 ];
 
-const updateAdminDataFilter = [
-    check('admin_name')
+const updateTeacherDataFilter = [
+    check('tch_name')
+        .isLength({ min: 3 })
+        .withMessage('Name is required!')
         .isAlpha("en-US", { ignore: ' -'})
         .withMessage('Name must contain anything other than Alphabet')
         .trim(),
-    check('admin_email')
+    check('tch_email')
         .isEmail()
         .withMessage('Invalid email address')
         .trim()
-        .custom(async(admin_email) => {
+        .custom(async(tch_email) => {
             try{
-                const admin = await Admin.findAll({where:{admin_email: admin_email}});
-                if(admin.length>1){
+                const teacher = await Teacher.findAll({where:{tch_email: tch_email}});
+                if(teacher.length>1){
                     throw createError('Email is already used!');
                 }
             }
@@ -65,15 +67,15 @@ const updateAdminDataFilter = [
                 throw createError(err.message);
             }
         }),
-    check('admin_phone')
+    check('tch_phone')
         .isMobilePhone('bn-BD', {
             strictMode: true
         })
         .withMessage('Mobile number must be a valid for Bangladesh')
-        .custom(async(admin_phone) => {
+        .custom(async(tch_phone) => {
             try{
-                const admin = await Admin.findAll({where: {admin_phone: admin_phone}});
-                if(admin.length>1){
+                const teacher = await Teacher.findAll({where: {tch_phone: tch_phone}});
+                if(teacher.length>1){
                     throw createError('Mobile number is already used!');
                 }
             }
@@ -83,7 +85,7 @@ const updateAdminDataFilter = [
         })
 ];
 
-adminDataFilterHandler = (req, res, next) => {
+teacherDataFilterHandler = (req, res, next) => {
     const errors = validationResult(req);
     const mappedErrors = errors.mapped();
 
@@ -98,7 +100,7 @@ adminDataFilterHandler = (req, res, next) => {
 };
 
 module.exports = {
-    addAdminDataFilter,
-    updateAdminDataFilter,
-    adminDataFilterHandler
+    addTeacherDataFilter,
+    updateTeacherDataFilter,
+    teacherDataFilterHandler
 };
